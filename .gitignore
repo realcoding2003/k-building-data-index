@@ -1,0 +1,10 @@
+
+.idea/
+
+.env
+
+__pycache__/
+
+data/bunji/
+
+data/
