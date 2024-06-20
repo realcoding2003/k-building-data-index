@@ -72,11 +72,7 @@ def process_data(sigungu_cd, bjdong_cd):
                 # item 처리
                 for item in items["item"]:
                     main_purps_cd = str(item["mainPurpsCd"]).strip()
-                    if main_purps_cd in [
-                        "02000",
-                        "02002",
-                        "02003",
-                    ]:
+                    if main_purps_cd.startswith("02"):
                         # raw_data에 저장
                         # 기존 데이터가 있으면 bldNm이 있는 데이터를 우선으로 함
                         insert_key = (
@@ -111,6 +107,8 @@ def process_data(sigungu_cd, bjdong_cd):
         # 처리완료 여부 저장
         with open(f"data/bunji/complete/{sigungu_cd}-{bjdong_cd}.txt", "w") as f:
             f.write("complete")
+
+        return raw_data
 
     except Exception as e:
         print(f"Error occurred: {e}")
