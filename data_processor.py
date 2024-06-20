@@ -62,7 +62,7 @@ def process_data(sigungu_cd, bjdong_cd):
                 break
 
             # 연립(다세대) 물건에 대한 법정동 코드 수집
-            # 2000, 2002, 2003 = mainPurpsCd
+            # 02로 시작하는 mainPurpsCd
             items = response_data["response"]["body"]["items"]
             if items != "":
                 # items["item"]이 사전인지 확인
@@ -100,13 +100,9 @@ def process_data(sigungu_cd, bjdong_cd):
 
         # data를 파일로 저장
         with open(
-                f"data/bunji/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8"
+                f"data/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8"
         ) as f:
             json.dump(raw_data, f, ensure_ascii=False, indent=4)
-
-        # 처리완료 여부 저장
-        with open(f"data/bunji/complete/{sigungu_cd}-{bjdong_cd}.txt", "w") as f:
-            f.write("complete")
 
         return raw_data
 

@@ -8,8 +8,7 @@ def main(sigungu_cd, bjdong_cd):
     지정된 시군구 코드와 법정동 코드를 사용하여 데이터를 처리합니다.
     """
     # 필요한 폴더 생성
-    os.makedirs("data/bunji", exist_ok=True)  # "data/bunji" 폴더를 생성합니다. 이미 존재하면 무시합니다.
-    os.makedirs("data/bunji/complete", exist_ok=True)  # "data/bunji/complete" 폴더를 생성합니다. 이미 존재하면 무시합니다.
+    os.makedirs("data", exist_ok=True)
 
     # 지정된 시군구 코드와 법정동 코드를 사용하여 데이터를 처리합니다.
     processed_data = process_data(sigungu_cd, bjdong_cd)

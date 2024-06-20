@@ -15,8 +15,8 @@ def thread_function(sigungu_cd, bjdong_cd):
     쓰레드에서 실행할 함수
     """
     with semaphore:
-        # 처리완료 파일이 있으면 스킵
-        if os.path.exists(f"data/bunji/complete/{sigungu_cd}-{bjdong_cd}.txt"):
+        # JSON 파일이 이미 존재하면 스킵
+        if os.path.exists(f"data/{sigungu_cd}-{bjdong_cd}.json"):
             print(f"{sigungu_cd}-{bjdong_cd} 지역 데이터는 이미 처리되었습니다.")
             return
 
@@ -31,8 +31,7 @@ def thread_function(sigungu_cd, bjdong_cd):
 
 def main():
     # 필요한 폴더 생성
-    os.makedirs("data/bunji", exist_ok=True)
-    os.makedirs("data/bunji/complete", exist_ok=True)
+    os.makedirs("data", exist_ok=True)
 
     # JSON 파일에서 모든 시군구 코드와 법정동 코드 읽기
     with open("config/addr_code2.json", "r", encoding="utf-8") as f:
