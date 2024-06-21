@@ -1,5 +1,13 @@
 import os  # OS 모듈을 가져와서 디렉토리 관련 작업을 수행합니다.
 from data_processor import process_data  # data_processor 모듈에서 process_data 함수를 가져옵니다.
+from dotenv import load_dotenv
+
+# .env 파일에서 환경 변수 로드
+load_dotenv()
+
+# 최대 동시 실행개수(환경 변수 읽기)
+SIGUNGU_CD = os.getenv('SIGUNGU')
+BJDONG_CD = os.getenv('BJDONG')
 
 
 def main(sigungu_cd, bjdong_cd):
@@ -24,9 +32,5 @@ def main(sigungu_cd, bjdong_cd):
 
 
 if __name__ == "__main__":
-    # 시군구 코드와 법정동 코드 설정
-    _sigungu_cd = "11110"  # 예시로 서울특별시 종로구의 시군구 코드입니다.
-    _bjdong_cd = "10300"   # 예시로 사직동의 법정동 코드입니다.
-
     # 이 스크립트가 직접 실행된 경우에만 main() 함수를 호출합니다.
-    main(_sigungu_cd, _bjdong_cd)
+    main(SIGUNGU_CD, BJDONG_CD)

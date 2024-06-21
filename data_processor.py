@@ -12,8 +12,8 @@ load_dotenv()
 # 환경 변수 읽기
 SERVICE_KEY = os.getenv('SERVICE_KEY')
 BASE_URL = os.getenv('BASE_URL')
-NUM_OF_ROWS = os.getenv('NUM_OF_ROWS')
-TYPE = os.getenv('TYPE')
+NUM_OF_ROWS = 100
+TYPE = 'json'
 
 
 def call_api(_url):
@@ -31,7 +31,7 @@ def call_api(_url):
     except requests.exceptions.RetryError:
         return call_api(_url)
     except Exception as e:
-        print(f"Error occurred: {e}")
+        print(f"Error occurred [{_url}]: {e}")
         sys.exit(1)
 
 
@@ -107,5 +107,5 @@ def process_data(sigungu_cd, bjdong_cd, stop_event=None):
         return raw_data
 
     except Exception as e:
-        print(f"Error occurred: {e}")
+        print(f"Error occurred [{sigungu_cd}-{bjdong_cd}]: {e}")
         sys.exit(1)
