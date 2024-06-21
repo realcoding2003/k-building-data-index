@@ -28,12 +28,14 @@ def call_api(_url):
     except Timeout:
         # print("Timeout occurred, retrying...")
         return call_api(_url)
+    except requests.exceptions.RetryError:
+        return call_api(_url)
     except Exception as e:
         print(f"Error occurred: {e}")
         sys.exit(1)
 
 
-def process_data(sigungu_cd, bjdong_cd):
+def process_data(sigungu_cd, bjdong_cd, stop_event=None):
     """
     데이터 처리 함수
     :return:
@@ -47,7 +49,7 @@ def process_data(sigungu_cd, bjdong_cd):
     page_no = 1
 
     try:
-        while True:
+        while stop_event is None or not stop_event.is_set():
             url = (
                 base_url.replace("[sigunguCd]", sigungu_cd)
                 .replace("[bjdongCd]", bjdong_cd)
