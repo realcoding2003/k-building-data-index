@@ -26,14 +26,16 @@ def call_api(_url):
         _response = requests.get(_url, timeout=2)
         return _response.json()
     except Timeout:
-        print("Timeout occurred, retrying...")
+        # print("Timeout occurred, retrying...")
+        return call_api(_url)
+    except requests.exceptions.RetryError:
         return call_api(_url)
     except Exception as e:
         print(f"Error occurred: {e}")
         sys.exit(1)
 
 
-def process_data(sigungu_cd, bjdong_cd):
+def process_data(sigungu_cd, bjdong_cd, stop_event=None):
     """
     데이터 처리 함수
     :return:
@@ -47,13 +49,13 @@ def process_data(sigungu_cd, bjdong_cd):
     page_no = 1
 
     try:
-        while True:
+        while stop_event is None or not stop_event.is_set():
             url = (
                 base_url.replace("[sigunguCd]", sigungu_cd)
                 .replace("[bjdongCd]", bjdong_cd)
                 .replace("[pageNo]", str(page_no))
             )
-            print(f"Processing {sigungu_cd}-{bjdong_cd} {page_no} page")
+            # print(f"Processing {sigungu_cd}-{bjdong_cd} {page_no} page")
 
             response_data = call_api(url)
 
@@ -81,7 +83,7 @@ def process_data(sigungu_cd, bjdong_cd):
 
                         # bldNm이 있는 데이터가 있으면 저장
                         bld_nm = str(item["bldNm"]).strip()
-                        print(insert_key, bld_nm)
+                        # print(insert_key, bld_nm)
 
                         insert_data = (
                             True if bld_nm != "" else insert_key not in raw_data
@@ -99,9 +101,7 @@ def process_data(sigungu_cd, bjdong_cd):
             page_no += 1
 
         # data를 파일로 저장
-        with open(
-                f"data/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8"
-        ) as f:
+        with open(f"data/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8") as f:
             json.dump(raw_data, f, ensure_ascii=False, indent=4)
 
         return raw_data
