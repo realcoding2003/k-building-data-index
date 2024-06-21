@@ -16,6 +16,7 @@ def main(sigungu_cd, bjdong_cd):
     # 처리한 파일에 대한 내용 출력
     if processed_data:
         # 데이터를 처리한 경우, 처리된 레코드 수와 시군구-법정동 코드를 출력합니다.
+        print(processed_data)
         print(f"Processed {len(processed_data)} records for {sigungu_cd}-{bjdong_cd}")
     else:
         # 데이터가 처리되지 않은 경우, 처리되지 않았음을 출력합니다.
