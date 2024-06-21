@@ -4,9 +4,13 @@ import threading
 from data_processor import process_data
 from tqdm import tqdm
 import logging
+from dotenv import load_dotenv
 
-# 최대 동시 실행 쓰레드 개수
-MAX_THREADS = 5
+# .env 파일에서 환경 변수 로드
+load_dotenv()
+
+# 최대 동시 실행개수(환경 변수 읽기)
+MAX_THREADS = int(os.getenv('MAX_THREADS'))
 stop_event = threading.Event()
 semaphore = threading.Semaphore(MAX_THREADS)
 
