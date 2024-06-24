@@ -1,19 +1,21 @@
 import os
 import json
-import sys
 from dotenv import load_dotenv
-
+import logging
 import requests
-from requests.exceptions import Timeout
 
-# .env 파일에서 환경 변수 로드
+# Load environment variables from .env file
 load_dotenv()
 
-# 환경 변수 읽기
+# Read environment variables
 SERVICE_KEY = os.getenv('SERVICE_KEY')
 BASE_URL = os.getenv('BASE_URL')
 NUM_OF_ROWS = 100
 TYPE = 'json'
+
+# Set up logging
+logging.basicConfig(filename='logs/data_processor.log', level=logging.INFO,
+                    format='[%(asctime)s %(levelname)s] %(message)s')
 
 
 def call_api(_url):
@@ -37,8 +39,11 @@ def call_api(_url):
 
 def process_data(sigungu_cd, bjdong_cd, stop_event=None):
     """
-    데이터 처리 함수
-    :return:
+    Data processing function
+    :param sigungu_cd: City/District code
+    :param bjdong_cd: Town code
+    :param stop_event: Event to stop the processing
+    :return: Processed data or None
     """
     base_url = (
         f"{BASE_URL}?serviceKey={SERVICE_KEY}"
@@ -55,36 +60,33 @@ def process_data(sigungu_cd, bjdong_cd, stop_event=None):
                 .replace("[bjdongCd]", bjdong_cd)
                 .replace("[pageNo]", str(page_no))
             )
-            # print(f"Processing {sigungu_cd}-{bjdong_cd} {page_no} page")
 
             response_data = call_api(url)
 
-            # 페이지 넘어갔을 때 처리
+            # Handle when the page is exceeded
             if response_data["response"]["body"]["items"] == "":
                 break
 
-            # 연립(다세대) 물건에 대한 법정동 코드 수집
-            # 02로 시작하는 mainPurpsCd
+            # Collecting legal dong code for multi-family (row house) items
+            # mainPurpsCd starts with 02
             items = response_data["response"]["body"]["items"]
             if items != "":
-                # items["item"]이 사전인지 확인
+                # Check if items["item"] is a dictionary
                 if isinstance(items["item"], dict):
                     items["item"] = [items["item"]]
 
-                # item 처리
+                # Process items
                 for item in items["item"]:
                     main_purps_cd = str(item["mainPurpsCd"]).strip()
                     if main_purps_cd.startswith("02"):
-                        # raw_data에 저장
-                        # 기존 데이터가 있으면 bldNm이 있는 데이터를 우선으로 함
+                        # Save to raw_data
+                        # If existing data, prioritize data with bldNm
                         insert_key = (
                             f"{sigungu_cd}-{bjdong_cd}-{item['bun']}-{item['ji']}"
                         )
 
-                        # bldNm이 있는 데이터가 있으면 저장
+                        # Save if there is bldNm
                         bld_nm = str(item["bldNm"]).strip()
-                        # print(insert_key, bld_nm)
-
                         insert_data = (
                             True if bld_nm != "" else insert_key not in raw_data
                         )
@@ -100,12 +102,12 @@ def process_data(sigungu_cd, bjdong_cd, stop_event=None):
                             }
             page_no += 1
 
-        # data를 파일로 저장
+        # Save data to file only if raw_data is not empty
         with open(f"data/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8") as f:
             json.dump(raw_data, f, ensure_ascii=False, indent=4)
 
         return raw_data
 
     except Exception as e:
-        print(f"Error occurred [{sigungu_cd}-{bjdong_cd}]: {e}")
-        sys.exit(1)
+        logging.error(f"process_data(): [{sigungu_cd}-{bjdong_cd}]: {e}")
+        return None
