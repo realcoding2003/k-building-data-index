@@ -55,7 +55,7 @@ def main():
     os.makedirs("data", exist_ok=True)
 
     # JSON 파일에서 미리 정의된 모든 시군구 코드와 법정동 코드 읽기
-    with open("config/addr_code.json", "r", encoding="utf-8") as f:
+    with open("config/address_code.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
     threads = []
@@ -70,8 +70,8 @@ def main():
             if stop_event.is_set():
                 break
 
-            sigungu_cd = value[:5]
-            bjdong_cd = value[5:]
+            sigungu_cd = key[:5]
+            bjdong_cd = key[5:]
 
             # 상위 코드(시도/구군) 무시 && 이미 존재하는 JSON 파일이 있는지 확인
             if bjdong_cd == "00000" or os.path.exists(f"data/{sigungu_cd}-{bjdong_cd}.json"):
