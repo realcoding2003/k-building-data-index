@@ -20,21 +20,25 @@ logging.basicConfig(filename='logs/data_processor.log', level=logging.INFO,
 
 def call_api(_url):
     """
-    API 호출 함수
-    :param _url:
-    :return:
+    API call function
+    :param _url: URL to call
+    :return: JSON response
     """
     try:
         _response = requests.get(_url, timeout=2)
-        return _response.json()
-    except Timeout:
-        # print("Timeout occurred, retrying...")
-        return call_api(_url)
-    except requests.exceptions.RetryError:
+        _response.raise_for_status()
+        try:
+            return _response.json()
+        except json.JSONDecodeError as e:
+            logging.error(f"_response.json() : {_url}\n{_response.text}\n{e}\n")
+            return call_api(_url)
+    except requests.exceptions.Timeout:
+        # logging.error(f"Timeout : {_url}\n{e}\n")
+        # Timeout 은 너무 자주 일어나는 오류로 다시 시도하는 것으로 해결함
         return call_api(_url)
     except Exception as e:
-        print(f"Error occurred [{_url}]: {e}")
-        sys.exit(1)
+        logging.error(f"Exception : {_url}\n{_response.text if '_response' in locals() else 'No response'}\n{e}\n")
+        return call_api(_url)
 
 
 def process_data(sigungu_cd, bjdong_cd, stop_event=None):
