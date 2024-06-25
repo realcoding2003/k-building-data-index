@@ -128,7 +128,7 @@ Region Counts:
 - `SERVICE_KEY`: (https://www.data.go.kr/index.do)에 가입해서 키를 발급 받으세요.
 
 - **address_code.json**: 주소 코드 매핑을 포함하는 JSON 파일
-- 참고(https://gist.github.com/realcoding2003/64e1ea791a4cad8b6faf53d018edc4be).
+- [참고 소스](https://gist.github.com/realcoding2003/64e1ea791a4cad8b6faf53d018edc4be).
 
 ## 수집된 데이터 구조
 
