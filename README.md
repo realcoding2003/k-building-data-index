@@ -23,7 +23,7 @@
 
 1. 레포지토리를 클론합니다:
     ```sh
-    git clone https://github.com/realcoding2003/bunji-data-index.git
+    git clone https://github.com/realcoding2003/k-building-data-index.git
     cd bunji-data-index
     ```
 
