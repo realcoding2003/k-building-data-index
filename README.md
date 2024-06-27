@@ -28,7 +28,6 @@
 project/
 │
 ├── src/
-│   ├── __init__.py
 │   ├── common/
 │   │   ├── __init__.py
 │   │   ├── logging_setup.py
@@ -39,19 +38,41 @@ project/
 ├── config/
 │   └── address_code.json
 │
-├── collect_all_data.py
-├── main.py
+├── scripts/
+│   ├── main.py
+│   ├── collect_all_data.py
+│   └── print_stat.py
+│
+├── tests/
+│   ├── __init__.py
+│   ├── test_data_collector.py
+│   └── test_utils.py
+│
 ├── requirements.txt
-├── .env
+├── sample.env
 └── README.md
 ```
 
 - `src/`: 소스 코드 디렉토리
   - `common/`: 공통 유틸리티 및 설정 파일
+    - `__init__.py`: 패키지 초기화 파일
+    - `logging_setup.py`: 로깅 설정
+    - `state.py`: 전역 상태 변수 관리
+    - `utils.py`: 유틸리티 함수
   - `data_collector_bunji.py`: 데이터 수집 및 처리 로직
 - `config/`: 설정 파일 디렉토리
-- `collect_all_data.py`: 전체 데이터 수집 스크립트
-- `main.py`: 단일 지역 데이터 수집 테스트 스크립트
+  - `address_code.json`: 주소 코드 매핑 파일
+- `scripts/`: 프로젝트 실행 파일
+  - `main.py`: 단일 지역 데이터 수집 테스트 스크립트
+  - `collect_all_data.py`: 전체 데이터 수집 스크립트
+  - `print_stat.py`: 수집 통계 출력 스크립트
+- `tests/`: 단위 테스트 디렉토리
+  - `__init__.py`: 테스트 패키지 초기화 파일
+  - `test_data_collector.py`: 데이터 수집기 테스트
+  - `test_utils.py`: 유틸리티 함수 테스트
+- `requirements.txt`: 프로젝트 의존성 목록
+- `sample.env`: 환경 변수 샘플 파일
+- `README.md`: 프로젝트 설명 문서
 
 ## 설치
 
@@ -115,13 +136,34 @@ python print_stat.py
 
 ## 환경 설정
 
-`.env` 파일에 다음 환경 변수를 설정하세요:
+1. 프로젝트 루트 디렉토리에 있는 `sample.env` 파일을 `.env`로 복사합니다:
 
-- `MAX_THREADS`: 최대 스레드 수 (기본값: 10)
-- `SERVICE_KEY`: API 서비스 키 (data.go.kr에서 발급)
-- `BASE_URL`: API 기본 URL
-- `NUM_OF_ROWS`: 한 번에 요청할 행 수 (기본값: 100)
-- `TYPE`: 응답 데이터 타입 (기본값: 'json')
+   ```sh
+   cp sample.env .env
+   ```
+
+2. 새로 생성된 `.env` 파일을 텍스트 에디터로 열고 필요한 값들을 수정합니다:
+
+   ```
+   SERVICE_KEY=your_service_key
+   BASE_URL=http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo
+   MAX_THREADS=10
+   SIGUNGU=44210
+   BJDONG=10400
+   ```
+
+   각 변수의 의미:
+   - `SERVICE_KEY`: API 서비스 키 (data.go.kr에서 발급)
+   - `BASE_URL`: API 기본 URL
+   - `MAX_THREADS`: 최대 스레드 수 (기본값: 10)
+   - `SIGUNGU`: 시군구 코드
+   - `BJDONG`: 법정동 코드
+
+3. `SERVICE_KEY`에는 반드시 data.go.kr에서 발급받은 실제 서비스 키를 입력해야 합니다.
+
+4. 필요에 따라 `MAX_THREADS`, `SIGUNGU`, `BJDONG` 값을 조정할 수 있습니다.
+
+주의: `.env` 파일에는 민감한 정보가 포함될 수 있으므로, 이 파일을 버전 관리 시스템에 커밋하지 않도록 주의하세요. `.gitignore` 파일에 `.env`가 포함되어 있는지 확인하십시오.
 
 ## 기여
 
