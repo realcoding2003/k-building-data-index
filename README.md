@@ -102,13 +102,13 @@ project/
 ### 단일 지역 테스트
 
 ```sh
-python main.py
+python collect_bunji_one.py
 ```
 
 ### 전체 데이터 수집
 
 ```sh
-python collect_all_data.py
+python collect_bunji.py
 ```
 
 ### 수집 통계 출력
