@@ -2,7 +2,7 @@ import os
 import json
 
 from dotenv import load_dotenv
-from src.common import call_api, data_processor_logger as logger, stop_event
+from src.common import call_api, log_data_processor as log, stop_event
 
 
 # .env 파일에서 환경 변수를 로드합니다.
@@ -91,5 +91,5 @@ def process_data(sigungu_cd, bjdong_cd):
 
     except Exception as e:
         # 예외 발생 시 로그를 기록합니다.
-        logger.error(f"process_data(): [{sigungu_cd}-{bjdong_cd}]: {e}")
+        log.error(f"process_data(): [{sigungu_cd}-{bjdong_cd}]: {e}")
         return None

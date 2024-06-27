@@ -1,24 +1,19 @@
 import os
 import json
 import threading
-from data_processor import process_data
 from tqdm import tqdm
-import logging
 from dotenv import load_dotenv
+from src.data_processor import process_data
+from src.common import log_collect_all_data as log, stop_event
+
 
 # .env 파일에서 환경 변수 로드
 load_dotenv()
 
 # 최대 동시 실행 개수(환경 변수 읽기)
 MAX_THREADS = int(os.getenv('MAX_THREADS'))
-# 쓰레드 종료 이벤트
-stop_event = threading.Event()
 # 세마포어 설정
 semaphore = threading.Semaphore(MAX_THREADS)
-
-# 로그 설정
-logging.basicConfig(filename='logs/processing.log', level=logging.INFO,
-                    format='[%(asctime)s %(levelname)s] %(message)s')
 
 
 def thread_function(sigungu_cd, bjdong_cd):
@@ -34,12 +29,12 @@ def thread_function(sigungu_cd, bjdong_cd):
 
         # 처리된 데이터가 있으면 로그 출력
         if processed_data:
-            logging.info(f"{sigungu_cd}-{bjdong_cd}: {len(processed_data)}개 레코드 처리완료")
+            log.info(f"{sigungu_cd}-{bjdong_cd}: {len(processed_data)}개 레코드 처리완료")
 
         return True
     except Exception as e:
         # 예외 발생 시 로그 기록
-        logging.error(f"예외 발생: {sigungu_cd}-{bjdong_cd}: {e}")
+        log.error(f"예외 발생: {sigungu_cd}-{bjdong_cd}: {e}")
         return False
     finally:
         # 쓰레드 종료 시 세마포어 해제
@@ -54,7 +49,6 @@ def monitor_input():
 
 
 def main():
-    global stop_event
     # JSON 파일에서 미리 정의된 모든 시군구 코드와 법정동 코드 읽기
     with open("config/address_code.json", "r", encoding="utf-8") as f:
         data = json.load(f)

@@ -1,5 +1,5 @@
 import os  # OS 모듈을 가져와서 디렉토리 관련 작업을 수행합니다.
-from data_processor import process_data  # data_processor 모듈에서 process_data 함수를 가져옵니다.
+from src.data_processor import process_data
 from dotenv import load_dotenv
 
 # .env 파일에서 환경 변수 로드
