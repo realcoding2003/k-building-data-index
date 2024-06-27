@@ -30,7 +30,7 @@ def thread_function(sigungu_cd, bjdong_cd):
 
     try:
         # 데이터 처리 함수 호출
-        processed_data = process_data(sigungu_cd, bjdong_cd, stop_event)
+        processed_data = process_data(sigungu_cd, bjdong_cd)
 
         # 처리된 데이터가 있으면 로그 출력
         if processed_data:

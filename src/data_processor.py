@@ -1,8 +1,8 @@
 import os
 import json
+
 from dotenv import load_dotenv
-import logging
-from src.common.utils import call_api
+from src.common import call_api, data_processor_logger as logger, stop_event
 
 
 # .env 파일에서 환경 변수를 로드합니다.
@@ -14,17 +14,12 @@ BASE_URL = os.getenv('BASE_URL')
 NUM_OF_ROWS = 100
 TYPE = 'json'
 
-# 로깅 설정: 로그 파일 경로와 로그 레벨 및 포맷을 지정합니다.
-logging.basicConfig(filename='logs/data_processor.log', level=logging.INFO,
-                    format='[%(asctime)s %(levelname)s] %(message)s')
 
-
-def process_data(sigungu_cd, bjdong_cd, stop_event=None):
+def process_data(sigungu_cd, bjdong_cd):
     """
     데이터 처리 함수
     :param sigungu_cd: 시군구 코드
     :param bjdong_cd: 법정동 코드
-    :param stop_event: 처리를 중단할 이벤트 (기본값: None)
     :return: 처리된 데이터 또는 None
     """
     # 기본 URL을 설정합니다.
@@ -96,5 +91,5 @@ def process_data(sigungu_cd, bjdong_cd, stop_event=None):
 
     except Exception as e:
         # 예외 발생 시 로그를 기록합니다.
-        logging.error(f"process_data(): [{sigungu_cd}-{bjdong_cd}]: {e}")
+        logger.error(f"process_data(): [{sigungu_cd}-{bjdong_cd}]: {e}")
         return None
