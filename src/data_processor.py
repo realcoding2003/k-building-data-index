@@ -2,7 +2,8 @@ import os
 import json
 from dotenv import load_dotenv
 import logging
-import requests
+from src.common.utils import call_api
+
 
 # .env 파일에서 환경 변수를 로드합니다.
 load_dotenv()
@@ -16,34 +17,6 @@ TYPE = 'json'
 # 로깅 설정: 로그 파일 경로와 로그 레벨 및 포맷을 지정합니다.
 logging.basicConfig(filename='logs/data_processor.log', level=logging.INFO,
                     format='[%(asctime)s %(levelname)s] %(message)s')
-
-
-def call_api(_url):
-    """
-    API 호출 함수
-    :param _url: 호출할 URL
-    :return: JSON 응답
-    """
-    try:
-        # 주어진 URL로 GET 요청을 보냅니다.
-        _response = requests.get(_url, timeout=2)
-        # 상태 코드가 200번 대가 아닌 경우 예외를 발생시킵니다.
-        _response.raise_for_status()
-        try:
-            # JSON 형식의 응답을 반환합니다.
-            return _response.json()
-        except json.JSONDecodeError as e:
-            # JSON 디코드 오류 발생 시 로그를 기록하고 다시 호출을 시도합니다.
-            logging.error(f"_response.json() : {_url}\n{_response.text}\n{e}\n")
-            return call_api(_url)
-    except requests.exceptions.Timeout:
-        # 타임아웃 예외 발생 시 다시 호출을 시도합니다.
-        # logging.error(f"Timeout : {_url}\n{e}\n")
-        return call_api(_url)
-    except Exception as e:
-        # 그 외 예외 발생 시 로그를 기록하고 다시 호출을 시도합니다.
-        logging.error(f"Exception : {_url}\n{_response.text if '_response' in locals() else 'No response'}\n{e}\n")
-        return call_api(_url)
 
 
 def process_data(sigungu_cd, bjdong_cd, stop_event=None):
