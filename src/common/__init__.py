@@ -1,6 +1,5 @@
 from .utils import call_api
 from .logging_setup import setup_logging
-from .state import stop_event
 
 import logging
 
@@ -10,7 +9,6 @@ setup_logging()
 # Export common functions and loggers
 __all__ = [
     'call_api',
-    'stop_event',
     'log_general',
     'log_data_processor',
     'log_collect_all_data'
