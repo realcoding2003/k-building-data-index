@@ -25,9 +25,3 @@ def call_api(_url, retries=3):
         if retries > 0:
             return call_api(_url, retries - 1)
         raise
-
-
-def create_directory_if_not_exists(directory):
-    """Creates a directory if it does not exist."""
-    if not os.path.exists(directory):
-        os.makedirs(directory, exist_ok=True)

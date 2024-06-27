@@ -55,10 +55,6 @@ def monitor_input():
 
 def main():
     global stop_event
-
-    # 필요한 폴더 생성
-    os.makedirs("data", exist_ok=True)
-
     # JSON 파일에서 미리 정의된 모든 시군구 코드와 법정동 코드 읽기
     with open("config/address_code.json", "r", encoding="utf-8") as f:
         data = json.load(f)

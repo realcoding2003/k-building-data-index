@@ -1,4 +1,4 @@
-from .utils import call_api, create_directory_if_not_exists
+from .utils import call_api
 from .logging_setup import setup_logging
 from .state import stop_event
 
@@ -10,7 +10,6 @@ setup_logging()
 # Export common functions and loggers
 __all__ = [
     'call_api',
-    'create_directory_if_not_exists',
     'stop_event',
     'log_general',
     'log_data_processor',
