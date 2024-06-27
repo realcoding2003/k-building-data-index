@@ -1,5 +1,5 @@
 import os  # OS 모듈을 가져와서 디렉토리 관련 작업을 수행합니다.
-from src.data_processor import process_data
+from src.data_collector_bunji import process_data
 from dotenv import load_dotenv
 
 # .env 파일에서 환경 변수 로드

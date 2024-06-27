@@ -2,25 +2,48 @@ import os
 import json
 import threading
 from tqdm import tqdm
-from dotenv import load_dotenv
-from src.data_processor import process_data
-from src.common import log_collect_all_data as log, stop_event
+from src.data_collector_bunji import process_data
+from src.common import log_collect_all_data as log
+from src.common.state import STOP_EVENT, MAX_THREADS
+import time
 
 
-# .env 파일에서 환경 변수 로드
-load_dotenv()
-
-# 최대 동시 실행 개수(환경 변수 읽기)
-MAX_THREADS = int(os.getenv('MAX_THREADS'))
 # 세마포어 설정
 semaphore = threading.Semaphore(MAX_THREADS)
+
+processing_completed = threading.Event()
+
+
+def monitor_input():
+    """키보드 입력을 모니터링하고 처리 완료 여부를 확인"""
+    print("엔터키를 누르면 프로그램이 종료됩니다. (처리 완료 시 자동 종료)")
+    while not processing_completed.is_set():
+        if STOP_EVENT.is_set():
+            break
+        if input_available():
+            user_input = input()
+            if user_input.strip() == "":
+                print("프로그램을 종료중입니다.\n")
+                STOP_EVENT.set()
+                break
+        time.sleep(0.1)  # 0.1초마다 확인
+
+    if processing_completed.is_set():
+        print("모든 처리가 완료되었습니다. 프로그램을 종료합니다.")
+
+
+def input_available():
+    """입력이 가능한지 확인하는 함수"""
+    import select
+    import sys
+    return select.select([sys.stdin, ], [], [], 0.0)[0]
 
 
 def thread_function(sigungu_cd, bjdong_cd):
     """쓰레드에서 실행할 함수"""
 
     # 프로그램 종료중일 경우
-    if stop_event.is_set():
+    if STOP_EVENT.is_set():
         return False
 
     try:
@@ -41,13 +64,6 @@ def thread_function(sigungu_cd, bjdong_cd):
         semaphore.release()
 
 
-def monitor_input():
-    """키보드 입력을 모니터링하여 엔터 키가 눌리면 stop_event를 설정"""
-    input("엔터키를 누르면 프로그램이 종료됩니다.\n")
-    print("프로그램을 종료중입니다.\n")
-    stop_event.set()
-
-
 def main():
     # JSON 파일에서 미리 정의된 모든 시군구 코드와 법정동 코드 읽기
     with open("config/address_code.json", "r", encoding="utf-8") as f:
@@ -64,7 +80,7 @@ def main():
     with tqdm(total=len(data), desc="데이터 수집중", ncols=150) as pbar:
         for key, value in data.items():
             # 프로그램 종료 중인지 체크
-            if stop_event.is_set():
+            if STOP_EVENT.is_set():
                 break
 
             sigungu_cd = key[:5]
@@ -90,8 +106,12 @@ def main():
         for thread in threads:
             thread.join()
 
-    # 종료키 입력 쓰레드 대기
-    input_thread.join()
+    pbar.close()
+
+    # 모든 처리가 완료되었음을 알림
+    processing_completed.set()
+
+    STOP_EVENT.set()
 
 
 if __name__ == "__main__":
