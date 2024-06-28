@@ -1,6 +1,7 @@
 import os
 import json
 from collections import Counter
+from src.common.state import DATA_BUNJI_FOLDER
 
 
 def read_data_files(data_folder):
@@ -52,7 +53,7 @@ def print_statistics(statistics):
 
 
 def main():
-    data_folder = 'data'
+    data_folder = DATA_BUNJI_FOLDER
     data = read_data_files(data_folder)
     statistics = calculate_statistics(data)
     print_statistics(statistics)

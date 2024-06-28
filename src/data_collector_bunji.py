@@ -1,10 +1,10 @@
 import json
 
-from src.common import call_api, log_data_processor as log
-from src.common.state import SERVICE_KEY, BASE_URL, NUM_OF_ROWS, TYPE, STOP_EVENT
+from src.common import call_api, log_data_collector as log
+from src.common.state import SERVICE_KEY, BASE_URL, NUM_OF_ROWS, TYPE, STOP_EVENT, DATA_BUNJI_FOLDER
 
 
-def process_data(sigungu_cd, bjdong_cd):
+def collect_data(sigungu_cd, bjdong_cd):
     """
     주어진 시군구 코드와 법정동 코드에 대한 데이터를 처리하는 함수
 
@@ -78,7 +78,7 @@ def process_data(sigungu_cd, bjdong_cd):
 
         # 수집된 데이터가 있으면 JSON 파일로 저장
         if raw_data:
-            with open(f"data/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8") as f:
+            with open(f"{DATA_BUNJI_FOLDER}/{sigungu_cd}-{bjdong_cd}.json", "w", encoding="utf-8") as f:
                 json.dump(raw_data, f, ensure_ascii=False, indent=4)
 
         return raw_data

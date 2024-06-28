@@ -2,9 +2,9 @@ import os
 import json
 import threading
 from tqdm import tqdm
-from src.data_collector_bunji import process_data
-from src.common import log_collect_all_data as log
-from src.common.state import STOP_EVENT, MAX_THREADS
+from src.data_collector_bunji import collect_data
+from src.common import log_scripts as log
+from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER
 import time
 
 
@@ -48,7 +48,7 @@ def thread_function(sigungu_cd, bjdong_cd):
 
     try:
         # 데이터 처리 함수 호출
-        processed_data = process_data(sigungu_cd, bjdong_cd)
+        processed_data = collect_data(sigungu_cd, bjdong_cd)
 
         # 처리된 데이터가 있으면 로그 출력
         if processed_data:
@@ -87,7 +87,7 @@ def main():
             bjdong_cd = key[5:]
 
             # 상위 코드(시도/구군) 무시 && 이미 존재하는 JSON 파일이 있는지 확인
-            if bjdong_cd == "00000" or os.path.exists(f"data/{sigungu_cd}-{bjdong_cd}.json"):
+            if bjdong_cd == "00000" or os.path.exists(f"{DATA_BUNJI_FOLDER}/{sigungu_cd}-{bjdong_cd}.json"):
                 pbar.update(1)
                 continue
 

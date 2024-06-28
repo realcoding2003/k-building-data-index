@@ -1,31 +1,21 @@
-import os  # OS 모듈을 가져와서 디렉토리 관련 작업을 수행합니다.
-from src.data_collector_bunji import process_data
-from dotenv import load_dotenv
-
-# .env 파일에서 환경 변수 로드
-load_dotenv()
-
-# 최대 동시 실행개수(환경 변수 읽기)
-SIGUNGU_CD = os.getenv('SIGUNGU')
-BJDONG_CD = os.getenv('BJDONG')
+from src.data_collector_bunji import collect_data
+from src.common.state import SIGUNGU_CD, BJDONG_CD
 
 
 def main(sigungu_cd, bjdong_cd):
     """
-    메인 함수로, 데이터 수집을 위한 디렉토리를 생성하고
     지정된 시군구 코드와 법정동 코드를 사용하여 데이터를 처리합니다.
+    테스트를 위한 코드
     """
-    # 필요한 폴더 생성
-    os.makedirs("data", exist_ok=True)
 
     # 지정된 시군구 코드와 법정동 코드를 사용하여 데이터를 처리합니다.
-    processed_data = process_data(sigungu_cd, bjdong_cd)
+    _data = collect_data(sigungu_cd, bjdong_cd)
 
     # 처리한 파일에 대한 내용 출력
-    if processed_data:
+    if _data:
         # 데이터를 처리한 경우, 처리된 레코드 수와 시군구-법정동 코드를 출력합니다.
-        print(processed_data)
-        print(f"Processed {len(processed_data)} records for {sigungu_cd}-{bjdong_cd}")
+        print(_data)
+        print(f"Processed {len(_data)} records for {sigungu_cd}-{bjdong_cd}")
     else:
         # 데이터가 처리되지 않은 경우, 처리되지 않았음을 출력합니다.
         print(f"No records processed for {sigungu_cd}-{bjdong_cd}")
