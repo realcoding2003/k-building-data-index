@@ -10,11 +10,11 @@ setup_logging()
 __all__ = [
     'call_api',
     'log_general',
-    'log_data_processor',
-    'log_collect_all_data'
+    'log_data_collector',
+    'log_scripts'
 ]
 
 # Export loggers
 log_general = logging.getLogger('general')
-log_data_processor = logging.getLogger('data_processor')
-log_collect_all_data = logging.getLogger('collect_all_data')
+log_data_collector = logging.getLogger('data_collector')
+log_scripts = logging.getLogger('scripts')
