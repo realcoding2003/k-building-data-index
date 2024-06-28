@@ -1,13 +1,12 @@
-import os
 import json
+import os
 import threading
-import time
-import select
-import sys
+
 from tqdm import tqdm
-from src.data_collector_building import collect_and_save_building_data
+
+from src.common import start_input_monitor, log_scripts as log
 from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER, DATA_BUILDING_FOLDER
-from src.common import log_scripts as log
+from src.data_collector_building import collect_and_save_building_data
 
 # 세마포어 생성
 semaphore = threading.Semaphore(MAX_THREADS)
@@ -103,35 +102,14 @@ def collect_all_buildings():
     processing_completed.set()
 
 
-def input_available():
-    return select.select([sys.stdin, ], [], [], 0.0)[0]
-
-
-def monitor_input():
-    print("엔터키를 누르면 프로그램이 종료됩니다. (처리 완료 시 자동 종료)")
-    while not processing_completed.is_set():
-        if STOP_EVENT.is_set():
-            break
-        if input_available():
-            user_input = input()
-            if user_input.strip() == "":
-                print("프로그램을 종료중입니다.\n")
-                STOP_EVENT.set()
-                break
-        time.sleep(0.1)  # 0.1초마다 확인
-
-    if processing_completed.is_set():
-        print("모든 처리가 완료되었습니다. 프로그램을 종료합니다.")
-
-
 def main():
-    input_thread = threading.Thread(target=monitor_input)
-    input_thread.start()
+    input_thread = start_input_monitor(STOP_EVENT, processing_completed)
 
-    collect_all_buildings()
-    input_thread.join()
-
-    STOP_EVENT.set()
+    try:
+        collect_all_buildings()
+    finally:
+        input_thread.join()
+        STOP_EVENT.set()
 
 
 if __name__ == "__main__":

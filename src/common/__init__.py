@@ -1,5 +1,6 @@
 from .utils import call_api
 from .logging_setup import setup_logging
+from .input_monitor import start_input_monitor
 
 import logging
 
@@ -9,6 +10,7 @@ setup_logging()
 # Export common functions and loggers
 __all__ = [
     'call_api',
+    'start_input_monitor',
     'log_general',
     'log_data_collector',
     'log_scripts'
