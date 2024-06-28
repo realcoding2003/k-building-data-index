@@ -1,7 +1,10 @@
 import os
 import json
 from src.common import call_api, log_data_collector as log
-from src.common.state import SERVICE_KEY, BASE_URL_AREA, NUM_OF_ROWS, TYPE, DATA_BUILDING_FOLDER
+from src.common.state import (
+    SERVICE_KEY, BASE_URL_AREA, NUM_OF_ROWS, TYPE,
+    DATA_BUILDING_FOLDER, DATA_BUILDING_NO_DATA_FOLDER
+)
 
 
 def get_area_info(sigungu_cd, bjdong_cd, bun, ji):
@@ -71,29 +74,27 @@ def reorganize_rooms_data(rooms):
 
 
 def collect_and_save_building_data(sigungu_cd, bjdong_cd, bun, ji):
-    try:
-        log.info(f"Collecting data for building: {sigungu_cd}-{bjdong_cd}-{bun}-{ji}")
+    output_path = f"{DATA_BUILDING_FOLDER}/{sigungu_cd}-{bjdong_cd}-{bun}-{ji}.json"
+    no_data_path = f"{DATA_BUILDING_NO_DATA_FOLDER}/{sigungu_cd}-{bjdong_cd}-{bun}-{ji}.txt"
 
+    # 이미 처리된 건물은 건너뛰기
+    if os.path.exists(output_path) or os.path.exists(no_data_path):
+        return
+
+    try:
         raw_data = get_area_info(sigungu_cd, bjdong_cd, bun, ji)
 
         if not raw_data:
-            log.info("No data found for this building.")
+            with open(no_data_path, 'w') as f:
+                f.write("NO_DATA")
             return None
 
         rooms_data = reorganize_rooms_data(raw_data)
-
-        if not os.path.exists(DATA_BUILDING_FOLDER):
-            os.makedirs(DATA_BUILDING_FOLDER)
-
-        output_path = f"{DATA_BUILDING_FOLDER}/{sigungu_cd}-{bjdong_cd}-{bun}-{ji}.json"
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(rooms_data, f, ensure_ascii=False, indent=4)
 
         log.info(f"Building data saved to: {output_path}")
 
-        return rooms_data
-
     except Exception as e:
-        log.error(f"Error collecting and saving building data: {e}")
-        return None
+        log.error(f"Error processing building {sigungu_cd}-{bjdong_cd}-{bun}-{ji}: {e}")

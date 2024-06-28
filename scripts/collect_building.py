@@ -5,7 +5,7 @@ import threading
 from tqdm import tqdm
 
 from src.common import start_input_monitor, log_scripts as log
-from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER, DATA_BUILDING_FOLDER
+from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER, DATA_BUILDING_FOLDER, DATA_BUILDING_NO_DATA_FOLDER
 from src.data_collector_building import collect_and_save_building_data
 
 # 세마포어 생성
@@ -47,18 +47,7 @@ def collect_building_codes():
 def process_building(building_code, pbar):
     try:
         sigungu_cd, bjdong_cd, bun, ji = building_code
-
-        # 이미 처리된 건물은 건너뛰기
-        output_path = f"{DATA_BUILDING_FOLDER}/{sigungu_cd}-{bjdong_cd}-{bun}-{ji}.json"
-        if os.path.exists(output_path):
-            return
-
-        result = collect_and_save_building_data(sigungu_cd, bjdong_cd, bun, ji)
-        if result:
-            log.info(f"Collected data for building: {sigungu_cd}-{bjdong_cd}-{bun}-{ji}")
-        else:
-            log.error(f"Failed to collect data for building: {sigungu_cd}-{bjdong_cd}-{bun}-{ji}")
-
+        collect_and_save_building_data(sigungu_cd, bjdong_cd, bun, ji)
     finally:
         pbar.update(1)
         # 세마포어 해제

@@ -27,4 +27,9 @@ BASE_URL_AREA = "https://apis.data.go.kr/1613000/BldRgstService_v2/getBrExposPub
 DATA_FOLDER = os.getenv('DATA_FOLDER', 'data')
 DATA_BUNJI_FOLDER = os.getenv('DATA_BUNJI_FOLDER', 'data/bunji')
 DATA_BUILDING_FOLDER = os.getenv('DATA_BUILDING_FOLDER', 'data/building')
+DATA_BUILDING_NO_DATA_FOLDER = os.getenv('DATA_BUILDING_NO_DATA_FOLDER', 'data/building/no-data')
 DATA_BUILDING_POS_FOLDER = os.getenv('DATA_BUILDING_POS_FOLDER', 'data/building-pos')
+
+# LOG 디렉토리 구조
+LOG_FOLDER = os.getenv('LOG_FOLDER', 'logs')
+LOG_FOLDER_FORMAT = os.getenv('LOG_FOLDER_FORMAT', '%Y-%m-%d')
