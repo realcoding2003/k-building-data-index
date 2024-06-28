@@ -38,7 +38,7 @@ def get_area_info(sigungu_cd, bjdong_cd, bun, ji):
                         or "아파트" in etc_purps
                         or "아파트" in main_purps_cd_nm
                 ):
-                    print("아파트로 판단되어 데이터를 수집하지 않습니다.")
+                    # print("아파트로 판단되어 데이터를 수집하지 않습니다.")
                     return []
 
                 raw_data.append(item)

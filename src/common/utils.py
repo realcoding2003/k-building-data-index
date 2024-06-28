@@ -1,6 +1,8 @@
 import json
-import logging
 import requests
+import logging
+
+log = logging.getLogger('general')
 
 
 def call_api(_url, retries=3):
@@ -11,7 +13,7 @@ def call_api(_url, retries=3):
         try:
             return _response.json()
         except json.JSONDecodeError as e:
-            logging.error(f"_response.json() : {_url}\n{_response.text}\n{e}\n")
+            log.error(f"_response.json() : {_url}\n{_response.text}\n{e}\n")
             if retries > 0:
                 return call_api(_url, retries - 1)
             raise
@@ -20,7 +22,7 @@ def call_api(_url, retries=3):
             return call_api(_url, retries - 1)
         raise
     except Exception as e:
-        logging.error(f"Exception : {_url}\n{_response.text if '_response' in locals() else 'No response'}\n{e}\n")
+        log.error(f"Exception : {_url}\n{_response.text if '_response' in locals() else 'No response'}\n{e}\n")
         if retries > 0:
             return call_api(_url, retries - 1)
         raise
