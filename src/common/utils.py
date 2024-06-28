@@ -2,7 +2,7 @@ import json
 import requests
 import logging
 
-log = logging.getLogger('general')
+log = logging.getLogger('requests')
 
 
 def call_api(_url, retries=3):

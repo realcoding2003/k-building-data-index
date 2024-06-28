@@ -11,12 +11,12 @@ setup_logging()
 __all__ = [
     'call_api',
     'start_input_monitor',
-    'log_general',
+    'log_requests',
     'log_data_collector',
     'log_scripts'
 ]
 
 # Export loggers
-log_general = logging.getLogger('general')
+log_requests = logging.getLogger('requests')
 log_data_collector = logging.getLogger('data_collector')
 log_scripts = logging.getLogger('scripts')
