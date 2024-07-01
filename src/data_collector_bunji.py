@@ -1,7 +1,7 @@
 import json
 
 from src.common import call_api, log_data_collector as log
-from src.common.state import SERVICE_KEY, BASE_URL, NUM_OF_ROWS, TYPE, STOP_EVENT, DATA_BUNJI_FOLDER
+from src.common.state import SERVICE_KEY, BASE_URL_TITLE, NUM_OF_ROWS, TYPE, STOP_EVENT, DATA_BUNJI_FOLDER
 
 
 def collect_data(sigungu_cd, bjdong_cd):
@@ -14,7 +14,7 @@ def collect_data(sigungu_cd, bjdong_cd):
     """
     # API 호출을 위한 기본 URL 설정
     base_url = (
-        f"{BASE_URL}?serviceKey={SERVICE_KEY}"
+        f"{BASE_URL_TITLE}?serviceKey={SERVICE_KEY}"
         f"&sigunguCd=[sigunguCd]&bjdongCd=[bjdongCd]&numOfRows={NUM_OF_ROWS}&pageNo=[pageNo]&_type={TYPE}"
     )
 
