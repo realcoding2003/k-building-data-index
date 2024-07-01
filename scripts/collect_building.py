@@ -4,8 +4,8 @@ import threading
 
 from tqdm import tqdm
 
-from src.common import start_input_monitor, log_scripts as log
-from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER, DATA_BUILDING_FOLDER, DATA_BUILDING_NO_DATA_FOLDER
+from src.common import start_input_monitor
+from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER, DATA_BUILDING_FOLDER
 from src.data_collector_building import collect_and_save_building_data
 
 # 세마포어 생성
