@@ -1,22 +1,23 @@
 import logging
 import os
 from datetime import datetime
+from src.common.state import LOG_FOLDER, LOG_FOLDER_FORMAT
 
 
 def setup_logging():
     """Sets up logging configuration for different loggers."""
     # Create log directory with date-time
-    log_dir = datetime.now().strftime('logs/%Y-%m-%d_%H-%M-%S')
+    log_dir = datetime.now().strftime(f"{LOG_FOLDER}/{LOG_FOLDER_FORMAT}")
     os.makedirs(log_dir, exist_ok=True)
 
     log_formatter = logging.Formatter('[%(asctime)s %(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
     # General logger
-    general_logger = logging.getLogger('general')
-    general_logger.setLevel(logging.INFO)
-    general_handler = logging.FileHandler(os.path.join(log_dir, 'general.log'))
-    general_handler.setFormatter(log_formatter)
-    general_logger.addHandler(general_handler)
+    requests_logger = logging.getLogger('requests')
+    requests_logger.setLevel(logging.INFO)
+    requests_handler = logging.FileHandler(os.path.join(log_dir, 'requests.log'))
+    requests_handler.setFormatter(log_formatter)
+    requests_logger.addHandler(requests_handler)
 
     # Data Processor logger
     data_processor_logger = logging.getLogger('data_collector')

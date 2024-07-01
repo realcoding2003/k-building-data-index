@@ -3,40 +3,14 @@ import json
 import threading
 from tqdm import tqdm
 from src.data_collector_bunji import collect_data
-from src.common import log_scripts as log
+from src.common import start_input_monitor, log_scripts as log
 from src.common.state import STOP_EVENT, MAX_THREADS, DATA_BUNJI_FOLDER
-import time
 
 
 # 세마포어 설정
 semaphore = threading.Semaphore(MAX_THREADS)
 
 processing_completed = threading.Event()
-
-
-def monitor_input():
-    """키보드 입력을 모니터링하고 처리 완료 여부를 확인"""
-    print("엔터키를 누르면 프로그램이 종료됩니다. (처리 완료 시 자동 종료)")
-    while not processing_completed.is_set():
-        if STOP_EVENT.is_set():
-            break
-        if input_available():
-            user_input = input()
-            if user_input.strip() == "":
-                print("프로그램을 종료중입니다.\n")
-                STOP_EVENT.set()
-                break
-        time.sleep(0.1)  # 0.1초마다 확인
-
-    if processing_completed.is_set():
-        print("모든 처리가 완료되었습니다. 프로그램을 종료합니다.")
-
-
-def input_available():
-    """입력이 가능한지 확인하는 함수"""
-    import select
-    import sys
-    return select.select([sys.stdin, ], [], [], 0.0)[0]
 
 
 def thread_function(sigungu_cd, bjdong_cd):
@@ -73,8 +47,7 @@ def main():
     threads = []
 
     # 사용자 입력을 모니터링할 쓰레드 생성 및 시작
-    input_thread = threading.Thread(target=monitor_input)
-    input_thread.start()
+    input_thread = start_input_monitor(STOP_EVENT, processing_completed)
 
     # tqdm을 사용하여 진행률 표시줄 생성
     with tqdm(total=len(data), desc="데이터 수집중", ncols=150) as pbar:
@@ -110,6 +83,8 @@ def main():
 
     # 모든 처리가 완료되었음을 알림
     processing_completed.set()
+
+    input_thread.join()
 
     STOP_EVENT.set()
 
