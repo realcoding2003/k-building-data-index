@@ -18,6 +18,11 @@ BUN = os.getenv('BUN')              # 번
 JI = os.getenv('JI')                # 지
 TYPE = os.getenv('TYPE', 'json')    # 기본값 'json'
 
+# Kakao API 관련 설정
+KAKAO_API_URL = "https://dapi.kakao.com/v2/local/search/address.json"
+KAKAO_API_KEY = os.getenv('KAKAO_API_KEY')
+KAKAO_HEADERS = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
+
 # 표제부:  https://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo
 # 전유공용면적: https://apis.data.go.kr/1613000/BldRgstService_v2/getBrExposPubuseAreaInfo
 BASE_URL_TITLE = "https://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo"
@@ -28,6 +33,7 @@ DATA_FOLDER = os.getenv('DATA_FOLDER', 'data')
 DATA_BUNJI_FOLDER = os.getenv('DATA_BUNJI_FOLDER', 'data/bunji')
 DATA_BUILDING_FOLDER = os.getenv('DATA_BUILDING_FOLDER', 'data/building')
 DATA_BUILDING_NO_DATA_FOLDER = os.getenv('DATA_BUILDING_NO_DATA_FOLDER', 'data/building/no-data')
+DATA_BUILDING_MERGED_FOLDER = os.getenv('DATA_BUILDING_MERGED_FOLDER', 'data/building-merged')
 DATA_BUILDING_POS_FOLDER = os.getenv('DATA_BUILDING_POS_FOLDER', 'data/building-pos')
 
 # LOG 디렉토리 구조
