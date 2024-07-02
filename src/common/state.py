@@ -18,6 +18,11 @@ BUN = os.getenv('BUN')              # 번
 JI = os.getenv('JI')                # 지
 TYPE = os.getenv('TYPE', 'json')    # 기본값 'json'
 
+# Redis 접속 정보
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = int(os.getenv('REDIS_PORT'))
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+
 # Kakao API 관련 설정
 KAKAO_API_URL = "https://dapi.kakao.com/v2/local/search/address.json"
 KAKAO_API_KEY = os.getenv('KAKAO_API_KEY')
