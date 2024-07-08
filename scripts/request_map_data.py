@@ -23,7 +23,7 @@ init()
 
 
 def get_nearby_buildings(lat, lon, radius):
-    current_date = datetime.now().strftime("%Y-%m-%d")
+    current_date = datetime.now().strftime("%Y-%m-02")
     redis_key = f"building_locations_{current_date}"
 
     try:
