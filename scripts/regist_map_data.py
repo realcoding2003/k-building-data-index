@@ -17,8 +17,7 @@ redis_client = redis.Redis(
 BATCH_SIZE = 1000
 
 # 현재 날짜를 가져와 Redis 키 생성
-current_date = datetime.now().strftime("%Y-%m-%d")
-REDIS_KEY = f"building_locations_{current_date}"
+REDIS_KEY = f"building_locations"
 
 
 def process_building_files(file_list):
@@ -32,10 +31,9 @@ def process_building_files(file_list):
                 data = json.load(f)
 
             key = os.path.splitext(os.path.basename(file_path))[0]
-            basic_info = data.get('기본정보', {})
 
-            lat = basic_info.get('위도')
-            lon = basic_info.get('경도')
+            lat = data.get('위도', None)
+            lon = data.get('경도', None)
 
             if lat and lon and key:
                 lat = float(lat)

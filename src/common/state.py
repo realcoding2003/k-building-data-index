@@ -42,6 +42,7 @@ DATA_BUILDING_FOLDER = os.path.join(DATA_FOLDER, 'building')
 DATA_BUILDING_NO_DATA_FOLDER = os.path.join(DATA_BUILDING_FOLDER, 'no-data')
 DATA_BUILDING_MERGED_FOLDER = os.path.join(DATA_FOLDER, 'building-merged')
 DATA_BUILDING_POS_FOLDER = os.path.join(DATA_FOLDER, 'building-pos')
+DATA_BUILDING_RTMS_FOLDER = os.path.join(DATA_FOLDER, 'building-rtms')
 
 # LOG 디렉토리 구조
 LOG_FOLDER = os.getenv('LOG_FOLDER', 'logs')
